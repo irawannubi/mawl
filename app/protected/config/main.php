@@ -61,6 +61,10 @@ return array(
 			'charset' => 'utf8',
 			'tablePrefix' => 'mawl_'
 		),
+		'authManager'=>array(
+			'class'=>'CPhpAuthManager',
+			'defaultRoles'=>array('authenticated', 'admin', 'testrole'),
+		),
 		'errorHandler'=>array(
 			// use 'site/error' action to display errors
 			'errorAction'=>'site/error',

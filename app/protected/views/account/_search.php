@@ -32,11 +32,6 @@
 	</div>
 
 	<div class="row">
-		<?php echo $form->label($model,'salt'); ?>
-		<?php echo $form->textField($model,'salt',array('size'=>45,'maxlength'=>45)); ?>
-	</div>
-
-	<div class="row">
 		<?php echo $form->label($model,'last_login'); ?>
 		<?php echo $form->textField($model,'last_login'); ?>
 	</div>

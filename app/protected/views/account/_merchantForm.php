@@ -40,18 +40,6 @@
 	</div>
 
 	<div class="row">
-		<?php echo $form->labelEx($model,'salt'); ?>
-		<?php echo $form->textField($model,'salt',array('size'=>45,'maxlength'=>45)); ?>
-		<?php echo $form->error($model,'salt'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'last_login'); ?>
-		<?php echo $form->textField($model,'last_login'); ?>
-		<?php echo $form->error($model,'last_login'); ?>
-	</div>
-
-	<div class="row">
 		<?php echo $form->labelEx($model,'email'); ?>
 		<?php echo $form->textField($model,'email',array('size'=>60,'maxlength'=>1000)); ?>
 		<?php echo $form->error($model,'email'); ?>
@@ -92,29 +80,10 @@
 		<?php echo $form->textArea($model,'merchant_photo_url',array('rows'=>6, 'cols'=>50)); ?>
 		<?php echo $form->error($model,'merchant_photo_url'); ?>
 	</div>
-
+	
 	<div class="row">
-		<?php echo $form->labelEx($model,'created_date'); ?>
-		<?php echo $form->textField($model,'created_date'); ?>
-		<?php echo $form->error($model,'created_date'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'created_by'); ?>
-		<?php echo $form->textField($model,'created_by'); ?>
-		<?php echo $form->error($model,'created_by'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'modified_date'); ?>
-		<?php echo $form->textField($model,'modified_date'); ?>
-		<?php echo $form->error($model,'modified_date'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'modified_by'); ?>
-		<?php echo $form->textField($model,'modified_by'); ?>
-		<?php echo $form->error($model,'modified_by'); ?>
+		<?php echo $form->labelEx($model,'invite_code'); ?>
+		<?php echo $form->error($model,'invite_code'); ?>
 	</div>
 
 	<div class="row buttons">

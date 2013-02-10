@@ -26,7 +26,6 @@ $this->menu=array(
 		'first_name',
 		'last_name',
 		'password',
-		'salt',
 		'last_login',
 		'email',
 		'merchant_brand_name',

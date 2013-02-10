@@ -25,10 +25,6 @@
 	<?php echo CHtml::encode($data->password); ?>
 	<br />
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('salt')); ?>:</b>
-	<?php echo CHtml::encode($data->salt); ?>
-	<br />
-
 	<b><?php echo CHtml::encode($data->getAttributeLabel('last_login')); ?>:</b>
 	<?php echo CHtml::encode($data->last_login); ?>
 	<br />
