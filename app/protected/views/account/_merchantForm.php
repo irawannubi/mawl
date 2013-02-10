@@ -16,8 +16,7 @@
 	<?php echo $form->errorSummary($model); ?>
 
 	<div class="row">
-		<?php echo $form->labelEx($model,'role'); ?>
-		<?php echo $form->textField($model,'role',array('size'=>45,'maxlength'=>45)); ?>
+		<?php echo $form->hiddenField($model,'role',array('value'=>'merchant')); ?>
 		<?php echo $form->error($model,'role'); ?>
 	</div>
 
@@ -83,6 +82,7 @@
 	
 	<div class="row">
 		<?php echo $form->labelEx($model,'invite_code'); ?>
+		<?php echo $form->textField($model,'invite_code',array('size'=>60, 'maxlength'=>100)); ?>
 		<?php echo $form->error($model,'invite_code'); ?>
 	</div>
 

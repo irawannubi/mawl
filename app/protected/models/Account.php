@@ -25,7 +25,7 @@
 class Account extends CActiveRecord
 {
 	
-	private $invite_code;
+	public $invite_code;
 	
 	/**
 	 * Returns the static model of the specified AR class.
@@ -130,6 +130,7 @@ class Account extends CActiveRecord
 			array('first_name, last_name, password', 'length', 'max'=>200),
 			array('email, merchant_brand_name', 'length', 'max'=>1000),
 			array('password', 'required'),
+			array('role', 'in', 'range'=>array('merchant','customer','admin')),
 			array('merchant_bank_number, merchant_bank_sort_code, merchant_phone', 'length', 'max'=>100),
 			array('last_login, merchant_bio, merchant_photo_url, created_date, modified_date', 'safe'),
 			// The following rule is used by search().

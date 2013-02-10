@@ -16,8 +16,7 @@
 	<?php echo $form->errorSummary($model); ?>
 
 	<div class="row">
-		<?php echo $form->labelEx($model,'role'); ?>
-		<?php echo $form->textField($model,'role',array('size'=>45,'maxlength'=>45)); ?>
+		<?php echo $form->hiddenField($model,'role',array('value'=>'customer')); ?>
 		<?php echo $form->error($model,'role'); ?>
 	</div>
 
