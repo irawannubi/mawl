@@ -25,6 +25,12 @@
 	<div id="header">
 		<div id="logo"><?php echo CHtml::encode(Yii::app()->name); ?></div>
 	</div><!-- header -->
+	
+	<?php 
+	if (!Yii::app()->user->isGuest){
+		echo 'Role: '.Yii::app()->user->role;
+	}
+	?>
 
 	<div id="mainmenu">
 		<?php $this->widget('zii.widgets.CMenu',array(

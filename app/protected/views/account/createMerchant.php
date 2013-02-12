@@ -13,6 +13,6 @@ $this->menu=array(
 );
 ?>
 
-<h1>Create Customer Account</h1>
+<h1>Create Merchant Account</h1>
 
-<?php echo $this->renderPartial('_customerForm', array('model'=>$model)); ?>
+<?php echo $this->renderPartial('_merchantForm', array('model'=>$model)); ?>

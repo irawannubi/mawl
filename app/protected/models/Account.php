@@ -91,6 +91,15 @@ class Account extends CActiveRecord
 		{
 			if($this->isNewRecord)
 			{
+				if($this->role=='merchant'){
+					if($this->invite_code!=null){
+						//check against invite code object
+						$inviteCode = InviteCode::model()->find('code=:code', array(':code'=>$this->invite_code));
+						die(print_r($inviteCode));
+					} else {
+						die('no invite code');
+					}
+				}
 				$this->password = $this->hashPassword($this->password);
 				$this->created_date = $this->modified_date = date('Y-m-d h:i:s', time());
 				$this->created_by = $this->modified_by = Yii::app()->user->id;
@@ -132,7 +141,7 @@ class Account extends CActiveRecord
 			array('password', 'required'),
 			array('role', 'in', 'range'=>array('merchant','customer','admin')),
 			array('merchant_bank_number, merchant_bank_sort_code, merchant_phone', 'length', 'max'=>100),
-			array('last_login, merchant_bio, merchant_photo_url, created_date, modified_date', 'safe'),
+			array('last_login, merchant_bio, merchant_photo_url, created_date, modified_date, invite_code', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('id, role, first_name, last_name, password, last_login, email, merchant_brand_name, merchant_bank_number, merchant_bank_sort_code, merchant_phone, merchant_bio, merchant_photo_url, created_date, created_by, modified_date, modified_by', 'safe', 'on'=>'search'),

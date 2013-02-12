@@ -28,16 +28,12 @@ class AccountController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view', 'create'),
+				'actions'=>array('delete', 'update'),
+				'roles'=>array('admin'),
+			),
+			array('allow',  // allow all users to perform 'index' and 'view' actions
+				'actions'=>array('createMerchant','create', 'index', 'view'),
 				'users'=>array('*'),
-			),
-			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
-				'users'=>array('@'),
-			),
-			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete'),
-				'users'=>array('admin'),
 			),
 			array('deny',  // deny all users
 				'users'=>array('*'),
@@ -51,16 +47,19 @@ class AccountController extends Controller
 	 */
 	public function actionView($id)
 	{
-		$this->render('view',array(
-			'model'=>$this->loadModel($id),
-		));
+		$model = $this->loadModel($id);
+		if ($model->role == 'merchant' || $model->id==Yii::app()->user->id){
+			$this->render('view',array(
+				'model'=>$model,
+			));
+		}
 	}
 
 	/**
 	 * Creates a new model.
 	 * If creation is successful, the browser will be redirected to the 'view' page.
 	 */
-	public function actionCreate()
+	public function actionCreateMerchant()
 	{
 		$model=new Account;
 
@@ -74,6 +73,26 @@ class AccountController extends Controller
 				$this->redirect(array('view','id'=>$model->id));
 		}
 
+		$this->render('createMerchant',array(
+			'model'=>$model,
+		));
+	}
+	
+	
+	public function actionCreate()
+	{
+		$model=new Account;
+	
+		// Uncomment the following line if AJAX validation is needed
+		// $this->performAjaxValidation($model);
+	
+		if(isset($_POST['Account']))
+		{
+			$model->attributes=$_POST['Account'];
+			if($model->save())
+				$this->redirect(array('view','id'=>$model->id));
+		}
+	
 		$this->render('create',array(
 			'model'=>$model,
 		));

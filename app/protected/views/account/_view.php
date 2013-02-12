@@ -29,11 +29,11 @@
 	<?php echo CHtml::encode($data->last_login); ?>
 	<br />
 
-	<?php /*
 	<b><?php echo CHtml::encode($data->getAttributeLabel('email')); ?>:</b>
 	<?php echo CHtml::encode($data->email); ?>
 	<br />
 
+	<?php /*
 	<b><?php echo CHtml::encode($data->getAttributeLabel('merchant_brand_name')); ?>:</b>
 	<?php echo CHtml::encode($data->merchant_brand_name); ?>
 	<br />
