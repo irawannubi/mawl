@@ -3,6 +3,11 @@
 class SiteController extends Controller
 {
 	
+	// explicity sets any action in this controller to use normal layout.
+	// This means admin controller using the site/error message can use this
+	// TODO: different settings for admin
+	public $layout='//layouts/column2';
+	
 	/**
 	 * Declares class-based actions.
 	 */

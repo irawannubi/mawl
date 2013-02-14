@@ -48,11 +48,11 @@ class AccountController extends Controller
 	public function actionView($id)
 	{
 		$model = $this->loadModel($id);
-		if ($model->role == 'merchant' || $model->id==Yii::app()->user->id){
+		//if ($model->role == 'merchant' || $model->id==Yii::app()->user->id){
 			$this->render('view',array(
 				'model'=>$model,
 			));
-		}
+		//}
 	}
 
 	/**

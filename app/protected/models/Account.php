@@ -29,6 +29,7 @@ class Account extends CActiveRecord
 	
 	/**
 	 * Returns the static model of the specified AR class.
+	 *
 	 * @param string $className active record class name.
 	 * @return Account the static model class
 	 */
@@ -40,6 +41,7 @@ class Account extends CActiveRecord
 	
 	/**
 	 * checks if the password supplied is correct
+	 *
 	 * @param string $password the user-supplied password
 	 * @return Boolean whether the password supplied is correct or incorrect
 	 */
@@ -50,7 +52,8 @@ class Account extends CActiveRecord
 	
 	
 	/**
-	 * hashes the password sing Blowfish algo
+	 * hashes the password using Blowfish algo
+	 *
 	 * @param string $password the user-supplied password
 	 * @return String the salted and hashed password
 	 */
@@ -64,11 +67,10 @@ class Account extends CActiveRecord
 	 * Generate a random salt in the crypt(3) standard Blowfish format.
 	 *
 	 * @param int $cost Cost parameter from 4 to 31.
-	 *
 	 * @throws Exception on invalid cost parameter.
 	 * @return string A Blowfish hash salt for use in PHP's crypt()
 	 */
-	function blowfishSalt($cost = 13)
+	protected function blowfishSalt($cost = 13)
 	{
 		if (!is_numeric($cost) || $cost < 4 || $cost > 31) {
 			throw new Exception("cost parameter must be between 4 and 31");
@@ -91,15 +93,7 @@ class Account extends CActiveRecord
 		{
 			if($this->isNewRecord)
 			{
-				if($this->role=='merchant'){
-					if($this->invite_code!=null){
-						//check against invite code object
-						$inviteCode = InviteCode::model()->find('code=:code', array(':code'=>$this->invite_code));
-						die(print_r($inviteCode));
-					} else {
-						die('no invite code');
-					}
-				}
+				// TODO here check if new merchant w/ no validation errors, and link invite code to account
 				$this->password = $this->hashPassword($this->password);
 				$this->created_date = $this->modified_date = date('Y-m-d h:i:s', time());
 				$this->created_by = $this->modified_by = Yii::app()->user->id;
@@ -115,6 +109,45 @@ class Account extends CActiveRecord
 		{
 			return false;
 		}
+	}
+	
+	
+	/**
+	 * validation rule checking the invite code supplied on merchant sign up
+	 *
+	 * @return void
+	 */
+	public function validInviteCode($attribute,$params)
+	{
+		if($this->isNewRecord && $this->role=='merchant')
+		{
+			if($this->invite_code!=null)
+			{
+				//check against invite code object
+				$model = InviteCode::model()->find('code=:code', array(':code'=>$this->invite_code));
+				if(!$model)
+				{
+					$this->addError('invite_code','Invalid invite code');
+				} 
+				else if ($model->account_id)
+				{
+					$this->addError('invite_code','Invite code has already been used');
+				}
+			}
+			else
+			{
+				$this->addError('invite_code','Please enter an invite code.');
+			}
+		}
+	}
+	
+	/**
+	 * validation rule checking if current user has permissions to add a admin user
+	 *
+	 * @return void
+	 */
+	public function canCreateAdmin($attribute,$params)
+	{
 	}
 	
 
@@ -138,8 +171,12 @@ class Account extends CActiveRecord
 			array('role', 'length', 'max'=>45),
 			array('first_name, last_name, password', 'length', 'max'=>200),
 			array('email, merchant_brand_name', 'length', 'max'=>1000),
+			//mine
+			array('invite_code', 'validInviteCode'),
+			array('role', 'canCreateAdmin'),
 			array('password', 'required'),
 			array('role', 'in', 'range'=>array('merchant','customer','admin')),
+			//end mine
 			array('merchant_bank_number, merchant_bank_sort_code, merchant_phone', 'length', 'max'=>100),
 			array('last_login, merchant_bio, merchant_photo_url, created_date, modified_date, invite_code', 'safe'),
 			// The following rule is used by search().
