@@ -22,10 +22,12 @@
  * @property string $modified_date
  * @property integer $modified_by
  */
-class Account extends CActiveRecord
+class Account extends Model
 {
 	
 	public $invite_code;
+	public $invite_code_model;
+	public $invite_code_successful = false;
 	
 	/**
 	 * Returns the static model of the specified AR class.
@@ -87,27 +89,33 @@ class Account extends CActiveRecord
 	}
 	
 	
+	/**
+	 * this function run before saving a record to db. Hashes pword
+	 *
+	 * @return bool whether function ran sucessfully
+	 */
 	protected function beforeSave()
 	{
 		if(parent::beforeSave())
 		{
 			if($this->isNewRecord)
 			{
-				// TODO here check if new merchant w/ no validation errors, and link invite code to account
 				$this->password = $this->hashPassword($this->password);
-				$this->created_date = $this->modified_date = date('Y-m-d h:i:s', time());
-				$this->created_by = $this->modified_by = Yii::app()->user->id;
-			}
-			else
-			{
-				$this->modified_date = date('Y-m-d h:i:s', time());
-				$this->modified_by = Yii::app()->user->id;
 			}
 			return true;
 		}
 		else
 		{
 			return false;
+		}
+	}
+	
+	protected function afterSave()
+	{
+		parent::afterSave();
+		if ($this->invite_code_successful==true){
+			$this->invite_code_model->account_id = $this->id;
+			$this->invite_code_model->save();
 		}
 	}
 	
@@ -124,14 +132,18 @@ class Account extends CActiveRecord
 			if($this->invite_code!=null)
 			{
 				//check against invite code object
-				$model = InviteCode::model()->find('code=:code', array(':code'=>$this->invite_code));
-				if(!$model)
+				$this->invite_code_model = InviteCode::model()->find('code=:code', array(':code'=>$this->invite_code));
+				if(!$this->invite_code_model)
 				{
 					$this->addError('invite_code','Invalid invite code');
 				} 
-				else if ($model->account_id)
+				else if ($this->invite_code_model->account_id)
 				{
 					$this->addError('invite_code','Invite code has already been used');
+				}
+				else 
+				{
+					$this->invite_code_successful = true;
 				}
 			}
 			else
@@ -148,6 +160,10 @@ class Account extends CActiveRecord
 	 */
 	public function canCreateAdmin($attribute,$params)
 	{
+		if($this->role=='admin' && !Yii::app()->user->checkAccess('Admin'))
+		{
+			$this->addError('role','You cannot create an admin user.');
+		}
 	}
 	
 
@@ -167,16 +183,17 @@ class Account extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('created_by, modified_by', 'numerical', 'integerOnly'=>true),
-			array('role', 'length', 'max'=>45),
-			array('first_name, last_name, password', 'length', 'max'=>200),
-			array('email, merchant_brand_name', 'length', 'max'=>1000),
+			//TODO: stop updatedby, createdby, + timestamps from ever being set in any model?? useful?
 			//mine
 			array('invite_code', 'validInviteCode'),
 			array('role', 'canCreateAdmin'),
 			array('password', 'required'),
 			array('role', 'in', 'range'=>array('merchant','customer','admin')),
 			//end mine
+			array('created_by, modified_by', 'numerical', 'integerOnly'=>true),
+			array('role', 'length', 'max'=>45),
+			array('first_name, last_name, password', 'length', 'max'=>200),
+			array('email, merchant_brand_name', 'length', 'max'=>1000),
 			array('merchant_bank_number, merchant_bank_sort_code, merchant_phone', 'length', 'max'=>100),
 			array('last_login, merchant_bio, merchant_photo_url, created_date, modified_date, invite_code', 'safe'),
 			// The following rule is used by search().

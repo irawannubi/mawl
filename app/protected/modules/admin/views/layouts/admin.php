@@ -6,14 +6,10 @@
 	<meta name="language" content="en" />
 
 	<!-- blueprint CSS framework -->
-	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/screen.css" media="screen, projection" />
-	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/print.css" media="print" />
-	<!--[if lt IE 8]>
-	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/ie.css" media="screen, projection" />
-	<![endif]-->
-
 	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/main.css" />
 	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/form.css" />
+	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/admin.css" media="screen, projection" />
+	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/common.css" media="screen, projection" />
 
 	<title><?php echo CHtml::encode($this->pageTitle); ?></title>
 </head>
@@ -22,45 +18,55 @@
 
 <div class="container" id="page">
 
-	<div id="header">
-		<div id="logo"><?php echo CHtml::encode(Yii::app()->name); ?> ADMIN</div>
-	</div><!-- header -->
-	
-	<?php 
-	if (!Yii::app()->user->isGuest){
-		echo 'Role: '.Yii::app()->user->role;
-	}
-	?>
-
-	<div id="mainmenu">
-		<?php $this->widget('zii.widgets.CMenu',array(
-			'items'=>array(
-				//array('label'=>'Admin', 'url'=>array('admin/index')),
-				array('label'=>'Home', 'url'=>array('index')),
-				array('label'=>'Products', 'url'=>array('product/index')),
-				array('label'=>'Sales', 'url'=>array('sale/index')),
-				array('label'=>'Login', 'url'=>array('/site/login'), 'visible'=>Yii::app()->user->isGuest),
-				array('label'=>'Logout ('.Yii::app()->user->name.')', 'url'=>array('/site/logout'), 'visible'=>!Yii::app()->user->isGuest)
-			),
-		)); ?>
-	</div><!-- mainmenu -->
-	<?php if(isset($this->breadcrumbs)):?>
-		<?php $this->widget('zii.widgets.CBreadcrumbs', array(
-			'links'=>$this->breadcrumbs,
-		)); ?><!-- breadcrumbs -->
-	<?php endif?>
-
-	<?php echo $content; ?>
+	<div class="admin-side-menu">
+		<div class="admin-side-menu-inner">
+			<div class="admin-logo"><?php echo CHtml::encode(Yii::app()->name); ?></div>
+				
+			<?php 
+			if (!Yii::app()->user->isGuest){
+				echo '<div class="admin-logo">Role: '.ucfirst(Yii::app()->user->role).'</div>';
+			}
+			?>
+				
+			<?php $this->widget('zii.widgets.CMenu',array(
+				'items'=>array(
+					//array('label'=>'Admin', 'url'=>array('admin/index')),
+					array('label'=>'Home', 'url'=>array('/site/index')),
+					array('label'=>'Admin Home', 'url'=>array('/admin')),
+					array('label'=>'Users', 'url'=>array('account/index')),
+					array('label'=>'Products', 'url'=>array('product/index')),
+					array('label'=>'Sales', 'url'=>array('sale/index')),
+					//array('label'=>'Product Categories', 'url'=>array('category/index'), 'visible'=>Yii::app()->user->checkAccess('admin')),
+					array('label'=>'Product Categories', 'url'=>array('category/index')),
+					array('label'=>'Login', 'url'=>array('/site/login'), 'visible'=>Yii::app()->user->isGuest),
+					array('label'=>'Logout ('.Yii::app()->user->name.')', 'url'=>array('/site/logout'), 'visible'=>!Yii::app()->user->isGuest)
+				),
+			)); ?>
+			
+			<div class="clear"></div>
+		</div>	
+	</div><!-- END .admin-side-menu -->
+		
+	<div class="admin-main-content">
+		<div class="admin-main-content-inner">
+			<?php
+				$this->beginWidget('zii.widgets.CPortlet', array(
+					'title'=>'Operations',
+				));
+				$this->widget('zii.widgets.CMenu', array(
+					'items'=>$this->menu,
+					'htmlOptions'=>array('class'=>'operations'),
+				));
+				$this->endWidget();
+			?>
+			
+			<?php echo $content; ?>
+		</div>
+	</div>
 	
 	<div class="clear"></div>
-
-	<div id="footer">
-		Copyright &copy; by My Company. TROLOLOLOLOL THIS IS MENTAL<br/>
-		All Rights Reserved.<br/>
-		<?php echo Yii::powered(); ?>
-	</div><!-- footer -->
-
-</div><!-- page -->
+		
+</div><!-- END #page -->
 
 </body>
 </html>

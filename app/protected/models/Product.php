@@ -25,7 +25,7 @@
  * @property string $modified_date
  * @property integer $modified_by
  */
-class Product extends CActiveRecord
+class Product extends Model
 {
 	/**
 	 * Returns the static model of the specified AR class.
@@ -36,6 +36,29 @@ class Product extends CActiveRecord
 	{
 		return parent::model($className);
 	}
+	
+	
+	/**
+	 * Verifies if the user is an admin. This is for field level security.
+	 *
+	 * @return void Just throws errors if needs be
+	 * TODO: This might be needed by a few classes so maybe move to Model or somewhere else more central
+	 */ 
+	public function adminOnly($attribute,$params)
+	{
+		if($this->isNewRecord)
+		{
+			if (!empty($this->$attribute) && !Yii::app()->user->checkAccess('admin'))
+			{
+				$this->addError($attribute,'You cannot do that as you are not an admin user.');
+			}
+		}
+		else
+		{
+			// TODO: check submitted values against db values. Non-admins shouldn't be allowed to update any private fields
+		}
+	}
+	
 
 	/**
 	 * @return string the associated database table name
@@ -53,8 +76,12 @@ class Product extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('seller_id, current_price, title, shipping_cost', 'required'),
-			array('approved_by, commission_pc, category_id, seller_id, current_price, previous_price, approved, quantity, visibility, featured, shipping_cost, created_by, modified_by', 'numerical', 'integerOnly'=>true),
+			//mine
+			array('current_price, commission_pc, previous_price, shipping_cost', 'type', 'type'=>'float'),
+			array('commission_pc, approved_by, approved, featured', 'adminOnly'),
+			//end mine
+			array('current_price, title, shipping_cost', 'required'),
+			array('approved_by, category_id, seller_id, approved, quantity, visibility, featured, created_by, modified_by', 'numerical', 'integerOnly'=>true),
 			array('sku, description, short_description, created_date, modified_date', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
@@ -70,6 +97,9 @@ class Product extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			// has one category
+			// has one sellerID
+			// those are the two that have come up so far.
 		);
 	}
 
@@ -81,17 +111,17 @@ class Product extends CActiveRecord
 		return array(
 			'id' => 'ID',
 			'approved_by' => 'Approved By',
-			'commission_pc' => 'Commission Pc',
+			'commission_pc' => 'Commission %',
 			'category_id' => 'Category',
 			'seller_id' => 'Seller',
 			'current_price' => 'Current Price',
 			'previous_price' => 'Previous Price',
 			'approved' => 'Approved',
-			'sku' => 'Sku',
+			'sku' => 'SKU',
 			'quantity' => 'Quantity',
 			'description' => 'Description',
 			'short_description' => 'Short Description',
-			'visibility' => 'Visibility',
+			'visibility' => 'Show Product On Website?',
 			'title' => 'Title',
 			'featured' => 'Featured',
 			'shipping_cost' => 'Shipping Cost',

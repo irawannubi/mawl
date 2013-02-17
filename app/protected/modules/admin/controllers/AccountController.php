@@ -60,9 +60,9 @@ class AccountController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$user = $this->loadModel(3);
+		$dataProvider=new CActiveDataProvider('Account');
 		$this->render('index',array(
-			'user'=>$user,
+			'dataProvider'=>$dataProvider,
 		));
 	}
 

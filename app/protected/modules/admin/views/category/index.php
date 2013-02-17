@@ -1,18 +1,18 @@
 <?php
-/* @var $this AccountController */
+/* @var $this CategoryController */
 /* @var $dataProvider CActiveDataProvider */
 
 $this->breadcrumbs=array(
-	'Accounts',
+	'Categories',
 );
 
 $this->menu=array(
-	array('label'=>'Create Account', 'url'=>array('create')),
-	array('label'=>'Manage Account', 'url'=>array('admin')),
+	array('label'=>'Create Category', 'url'=>array('create')),
+	array('label'=>'Manage Category', 'url'=>array('admin')),
 );
 ?>
 
-<h1>Accounts</h1>
+<h1>Categories</h1>
 
 <?php $this->widget('zii.widgets.CListView', array(
 	'dataProvider'=>$dataProvider,

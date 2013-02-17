@@ -13,7 +13,7 @@
  * @property string $modified_date
  * @property integer $modified_by
  */
-class Category extends CActiveRecord
+class Category extends Model
 {
 	/**
 	 * Returns the static model of the specified AR class.
