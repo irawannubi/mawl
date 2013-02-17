@@ -67,8 +67,15 @@ class ProductController extends Controller
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}
-
+		
+		$categories = Category::model()->findAll();
+		$categoryList = array();
+		foreach ($categories as $value) {
+			$categoryList[$value->attributes['id']] = $value->attributes['title'];
+		}
+		
 		$this->render('create',array(
+			'categories'=>$categoryList,
 			'model'=>$model,
 		));
 	}

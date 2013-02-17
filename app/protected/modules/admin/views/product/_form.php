@@ -22,10 +22,8 @@
 	</div>
 
 	<div class="row">
-		Need to get categories and put in drop down list
 		<?php echo $form->labelEx($model,'category_id'); ?>
-		<?php echo $form->textField($model,'category_id'); ?>
-		<?php echo $form->dropDownList($model, 'visibility', $model->categories); ?>
+		<?php echo $form->dropDownList($model, 'category_id', $categories); ?>
 		<?php echo $form->error($model,'category_id'); ?>
 	</div>
 
