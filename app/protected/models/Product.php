@@ -97,9 +97,11 @@ class Product extends Model
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			// has one category
-			// has one sellerID
-			// those are the two that have come up so far.
+			'category_rel'=>array(self::BELONGS_TO, 'Category', 'category_id'),
+			'seller_rel'=>array(self::BELONGS_TO, 'Account', 'seller_id'),
+			'approved_by_rel'=>array(self::BELONGS_TO, 'Account', 'approved_by'),
+			'modified_by_rel'=>array(self::BELONGS_TO, 'Account', 'modified_by'),
+			'created_by_rel'=>array(self::BELONGS_TO, 'Account', 'created_by'),
 		);
 	}
 

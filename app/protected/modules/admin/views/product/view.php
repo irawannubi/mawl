@@ -43,3 +43,5 @@ $this->menu=array(
 		'modified_by',
 	),
 )); ?>
+
+<?php echo $modified_by->attributes['first_name'] . ' ' . $modified_by->attributes['last_name']; ?>

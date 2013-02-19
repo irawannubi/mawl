@@ -45,8 +45,11 @@ class ProductController extends Controller
 	 */
 	public function actionView($id)
 	{
+		$model = $this->loadModel($id);
+		$modified_by = $model->modified_by_rel;
 		$this->render('view',array(
-			'model'=>$this->loadModel($id),
+			'model'=>$model,
+			'modified_by'=>$modified_by
 		));
 	}
 
