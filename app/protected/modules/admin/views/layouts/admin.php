@@ -5,23 +5,26 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta name="language" content="en" />
 
-	<!-- blueprint CSS framework -->
-	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/main.css" />
-	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/form.css" />
-	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/admin.css" media="screen, projection" />
-	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/common.css" media="screen, projection" />
+	<!-- origional CSS stuff/blueprint framework -->
+	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/orig/main.css" />
+	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/orig/form.css" />
+
+	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/bootstrap.scaffolding.css" />
+	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/admin.css" />
+	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/common.css" />
 
 	<title><?php echo CHtml::encode($this->pageTitle); ?></title>
+	
 </head>
 
 <body>
 
-<div class="container" id="page">
-
+<div class="container">
+	
 	<div class="admin-side-menu">
 		<div class="admin-side-menu-inner">
 			<div class="admin-logo"><?php echo CHtml::encode(Yii::app()->name); ?></div>
-				
+
 			<?php 
 			if (!Yii::app()->user->isGuest){
 				echo '<div class="admin-logo">Role: '.ucfirst(Yii::app()->user->role).'</div>';
@@ -34,6 +37,7 @@
 					array('label'=>'Home', 'url'=>array('/site/index')),
 					array('label'=>'Admin Home', 'url'=>array('/admin')),
 					array('label'=>'Users', 'url'=>array('account/index')),
+					array('label'=>'Invite Codes', 'url'=>array('inviteCode/index')),
 					array('label'=>'Products', 'url'=>array('product/index')),
 					array('label'=>'Sales', 'url'=>array('sale/index')),
 					//array('label'=>'Product Categories', 'url'=>array('category/index'), 'visible'=>Yii::app()->user->checkAccess('admin')),
@@ -49,6 +53,18 @@
 		
 	<div class="admin-main-content">
 		<div class="admin-main-content-inner">
+			
+			<?php
+				$flashMessages = Yii::app()->user->getFlashes();
+				if ($flashMessages) {
+				    echo '<ul class="flashes">';
+				    foreach($flashMessages as $key => $message) {
+				        echo '<li class="flash"><div class="flash-' . $key . '">' . $message . "</div></li>\n";
+				    }
+				    echo '</ul>';
+				}
+			?>
+			
 			<?php
 				$this->beginWidget('zii.widgets.CPortlet', array(
 					'title'=>'Operations',

@@ -1,0 +1,63 @@
+/**
+*** homepage
+**/
+
+.homepage-slider {
+	height: 200px;
+	background: #f3f3f3;
+}
+
+/**
+*** main menu **
+**/
+.mainmenu {
+	border-top: 1px solid #333;
+	border-bottom: 1px solid #333;
+}
+
+.mainmenu ul
+{
+	padding:6px 20px 5px 20px;
+	margin:0px;
+}
+
+.mainmenu ul li
+{
+	display: inline;
+}
+
+.mainmenu ul li a
+{
+	color:#333;
+	background-color:transparent;
+	font-size:12px;
+	font-weight:bold;
+	text-decoration:none;
+	padding:5px 8px;
+}
+
+.mainmenu ul li a:hover, .mainmenu ul li.active a
+{
+	color: #6399cd;
+	background-color:#EFF4FA;
+	text-decoration:none;
+}
+
+/**
+*** structure **
+**/
+
+/* body > container > row >spanX > content */
+/* content is between header and footer */
+.content
+{
+    margin: 20px 0;
+}
+
+.footer
+{
+	padding: 10px;
+	margin: 10px 0;
+	text-align: center;
+	border-top: 1px solid #333;
+}

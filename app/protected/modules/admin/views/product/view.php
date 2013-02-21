@@ -26,6 +26,11 @@ $this->menu=array(
 		'commission_pc',
 		'category_id',
 		'seller_id',
+		array(
+			'label'=>'Seller',
+			'type'=>'raw',
+			'value'=>CHtml::link(CHtml::encode($model->r_seller->first_name.' '.$model->r_seller->last_name), array('account/view','id'=>$model->r_seller->id))
+		),
 		'current_price',
 		'previous_price',
 		'approved',
@@ -43,5 +48,3 @@ $this->menu=array(
 		'modified_by',
 	),
 )); ?>
-
-<?php echo $modified_by->attributes['first_name'] . ' ' . $modified_by->attributes['last_name']; ?>

@@ -21,13 +21,9 @@ class ProductController extends Controller
 	public function accessRules()
 	{
 		return array(
-			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view'),
-				'users'=>array('*'),
-			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
-				'users'=>array('@'),
+				'actions'=>array('create','update','index','view'),
+				'roles'=>array('merchant', 'admin'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
 				'actions'=>array('admin','delete'),
@@ -46,10 +42,12 @@ class ProductController extends Controller
 	public function actionView($id)
 	{
 		$model = $this->loadModel($id);
-		$modified_by = $model->modified_by_rel;
+		if ( !$this->isOwn($model->seller_id) && $this->isMerchant() ){
+			throw new CHttpException(403,'You are not authorized to view others products.');
+		}
+		
 		$this->render('view',array(
 			'model'=>$model,
-			'modified_by'=>$modified_by
 		));
 	}
 
@@ -91,7 +89,10 @@ class ProductController extends Controller
 	public function actionUpdate($id)
 	{
 		$model=$this->loadModel($id);
-
+		if ( !$this->isOwn($model->seller_id) && $this->isMerchant() ){
+			throw new CHttpException(403,'You are not authorized to update others products.');
+		}
+		
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
@@ -101,8 +102,16 @@ class ProductController extends Controller
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}
+		
+		// TODO: Dont repeat this. Put it in the model?
+		$categories = Category::model()->findAll();
+		$categoryList = array();
+		foreach ($categories as $value) {
+			$categoryList[$value->attributes['id']] = $value->attributes['title'];
+		}
 
 		$this->render('update',array(
+			'categories'=>$categoryList,
 			'model'=>$model,
 		));
 	}
@@ -126,7 +135,20 @@ class ProductController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$dataProvider=new CActiveDataProvider('Product');
+		if ($this->isMerchant())
+		{
+			$opts = array(
+				'criteria'=>array(
+			        'condition'=>'seller_id='.Yii::app()->user->id,
+			    ),
+			);
+			$dataProvider=new CActiveDataProvider('Product', $opts);
+		}
+		else
+		{
+			$dataProvider=new CActiveDataProvider('Product');	
+		}	
+
 		$this->render('index',array(
 			'dataProvider'=>$dataProvider,
 		));
@@ -156,7 +178,7 @@ class ProductController extends Controller
 	 */
 	public function loadModel($id)
 	{
-		$model=Product::model()->findByPk($id);
+		$model=Product::model()->with('r_seller', 'r_modified_by')->findByPk($id);
 		if($model===null)
 			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;

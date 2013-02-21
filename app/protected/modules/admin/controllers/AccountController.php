@@ -29,7 +29,7 @@ class AccountController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('delete', 'update'),
+				'actions'=>array('delete', 'update', 'generateInviteCode'),
 				'roles'=>array('admin'),
 			),
 			array('allow',  // allow all users to perform 'index' and 'view' actions
@@ -65,7 +65,8 @@ class AccountController extends Controller
 			'dataProvider'=>$dataProvider,
 		));
 	}
-
+	
+	
 	/**
 	 * Returns the data model based on the primary key given in the GET variable.
 	 * If the data model is not found, an HTTP exception will be raised.

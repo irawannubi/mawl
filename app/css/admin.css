@@ -1,7 +1,8 @@
-#page {
+.container {
 	margin: 0;
 	border: none;
 	min-width: 500px;
+	width: auto;
 }
 
 .admin-side-menu {
@@ -73,6 +74,16 @@
 .form .row {
 	margin-bottom: 10px;
 }
+
+/* flashes */
+
+ul.flashes {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+
+
 
 /* typography */
 a, a:link {

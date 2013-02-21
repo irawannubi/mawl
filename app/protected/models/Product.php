@@ -59,6 +59,27 @@ class Product extends Model
 		}
 	}
 	
+	
+	/**
+	 * this function run before saving a record to db. Saves seller id
+	 *
+	 * @return bool whether function ran sucessfully
+	 */
+	protected function beforeSave()
+	{
+		if(parent::beforeSave())
+		{
+			if($this->isNewRecord)
+			{
+				$this->seller_id = Yii::app()->user->id;
+			}
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
 
 	/**
 	 * @return string the associated database table name
@@ -97,11 +118,13 @@ class Product extends Model
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'category_rel'=>array(self::BELONGS_TO, 'Category', 'category_id'),
-			'seller_rel'=>array(self::BELONGS_TO, 'Account', 'seller_id'),
-			'approved_by_rel'=>array(self::BELONGS_TO, 'Account', 'approved_by'),
-			'modified_by_rel'=>array(self::BELONGS_TO, 'Account', 'modified_by'),
-			'created_by_rel'=>array(self::BELONGS_TO, 'Account', 'created_by'),
+			'r_approved_by'=>array(self::BELONGS_TO, 'Account', 'approved_by'),
+			'r_category'=>array(self::BELONGS_TO, 'Category', 'category_id'),
+			'r_seller'=>array(self::BELONGS_TO, 'Account', 'seller_id'),
+			'r_modified_by'=>array(self::BELONGS_TO, 'Account', 'modified_by'),
+			'r_created_by'=>array(self::BELONGS_TO, 'Account', 'created_by'),
+			'r_sub_product'=>array(self::HAS_MANY, 'SubAccount', 'parent_product_id'),
+			'r_product_image'=>array(self::HAS_MANY, 'ProductImage', 'product_id'),
 		);
 	}
 
@@ -116,6 +139,7 @@ class Product extends Model
 			'commission_pc' => 'Commission %',
 			'category_id' => 'Category',
 			'seller_id' => 'Seller',
+			'r_seller' => 'Seller (relation)',
 			'current_price' => 'Current Price',
 			'previous_price' => 'Previous Price',
 			'approved' => 'Approved',

@@ -16,9 +16,6 @@ class WebUser extends CWebUser
             // Not identified => no rights
             return false;
         }
-        if ($user->role === 'admin') {
-            return true; // admin role has access to everything
-        }
         // allow access if the operation request is the current user's role
         return ($operation === $user->role);
     }

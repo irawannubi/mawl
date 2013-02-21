@@ -12,7 +12,7 @@
  * @property string $modified_date
  * @property integer $modified_by
  */
-class InviteCode extends CActiveRecord
+class InviteCode extends Model
 {
 	/**
 	 * Returns the static model of the specified AR class.
@@ -22,6 +22,14 @@ class InviteCode extends CActiveRecord
 	public static function model($className=__CLASS__)
 	{
 		return parent::model($className);
+	}
+	
+	public function generateCode(){
+		$str_length=10;
+	    $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+	    for ($i = 0; $i < $str_length; $i++) {
+	        $this->code .= $characters[rand(0, strlen($characters) - 1)];
+	    }
 	}
 
 	/**
@@ -67,8 +75,8 @@ class InviteCode extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'account_id' => 'Account',
-			'code' => 'Code',
+			'account_id' => 'Linked Merchant Account',
+			'code' => 'Invite Code',
 			'created_date' => 'Created Date',
 			'created_by' => 'Created By',
 			'modified_date' => 'Modified Date',

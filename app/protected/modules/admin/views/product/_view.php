@@ -3,6 +3,10 @@
 /* @var $data Product */
 ?>
 
+<pre>
+	<?php //print_r($data);?>
+</pre>
+
 <div class="view">
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('id')); ?>:</b>
@@ -21,10 +25,12 @@
 	<?php echo CHtml::encode($data->category_id); ?>
 	<br />
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('seller_id')); ?>:</b>
-	<?php echo CHtml::encode($data->seller_id); ?>
-	<br />
-
+	<?php if($data->r_seller){ ?>
+		<b><?php echo CHtml::encode($data->getAttributeLabel('r_seller')); ?>:</b>
+		<?php echo CHtml::encode($data->r_seller->last_name); ?>
+		<br />
+	<?php } ?>
+	
 	<b><?php echo CHtml::encode($data->getAttributeLabel('current_price')); ?>:</b>
 	<?php echo CHtml::encode($data->current_price); ?>
 	<br />

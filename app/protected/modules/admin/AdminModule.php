@@ -20,7 +20,7 @@ class AdminModule extends CWebModule
 		{
 			// this method is called before any module controller action is performed
 			// you may place customized code here
-			if (!Yii::app()->user->checkAccess('Admin') && !Yii::app()->user->checkAccess('merchant')){
+			if (!Yii::app()->user->checkAccess('admin') && !Yii::app()->user->checkAccess('merchant')){
 				// replace this with a redirect or something more appropriate
 				throw new CHttpException(403,'You are not a admin or merchant. You cannot access the admin area');
 			}
